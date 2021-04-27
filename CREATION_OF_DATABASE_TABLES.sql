@@ -97,3 +97,49 @@ CREATE TABLE PromoCode (
   
   drop table PromoCode;
 
+
+------------- LOCATIONS TABLE ----------------------------
+  
+  CREATE TABLE Locations(
+    LocationID INTEGER NOT NULL PRIMARY KEY,
+    Street varchar2(100) NOT NULL,
+    Region varchar2(50) NOT NULL,
+    City varchar2(50) NOT NULL,
+    States varchar2(50) NOT NULL,
+    Country varchar2(50) NOT NULL,
+    Latitude decimal(10,6) NOT NULL,
+    Longitude decimal(10,6) NOT NULL
+  );
+  
+  drop table Locations;
+  
+  
+  ------------- CARS TABLE ----------------------------
+  
+  
+  CREATE TABLE Cars(
+    ID INTEGER GENERATED AS IDENTITY (START WITH 1 INCREMENT BY 1),
+    CarID varchar2(11) NOT NULL PRIMARY KEY,
+    OwnerID varchar2(11) NOT NULL REFERENCES CAROWNER(OWNERID),
+    DriverID varchar2(11) NOT NULL REFERENCES DRIVER(DRIVERID),
+    CarModel varchar2(50) NOT NULL,
+    CarRegistrationNumber varchar2(10) NOT NULL,
+    CarColor varchar2(30) NOT NULL,
+    LocationID INTEGER NOT NULL REFERENCES Locations(LocationID),
+    Capacities INTEGER NOT NULL,
+    Categories varchar2(25) NOT NULL
+  );
+  
+  drop table Cars;
+  
+  ------------- TRIP CHARGES TABLE ----------------------------
+  
+  CREATE TABLE TripCharges(
+    
+    States varchar2(50) NOT NULL PRIMARY KEY,
+    Tax decimal(5,3) DEFAULT 0 NOT NULL,
+    ChargePerKilometer decimal(5,3) DEFAULT 0 NOT NULL 
+  );
+  
+   drop table TripCharges;
+  
