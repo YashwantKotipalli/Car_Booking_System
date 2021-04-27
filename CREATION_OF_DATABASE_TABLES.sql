@@ -143,3 +143,65 @@ CREATE TABLE PromoCode (
   
    drop table TripCharges;
   
+  ------------- REQUEST TABLE ----------------------------
+  
+ CREATE TABLE Request(
+ 
+    ID INTEGER GENERATED AS IDENTITY (START WITH 1 INCREMENT BY 1) NOT NULL,
+    RequestID varchar2(11) NOT NULL Primary Key,
+    RiderID varchar2(11) NOT NULL REFERENCES Rider(RiderID),
+    CarID varchar2(11) NOT NULL REFERENCES Cars(CarID),
+    SourceLocationID INTEGER NOT NULL REFERENCES Locations(LocationID),
+    DestinationLocationID INTEGER NOT NULL REFERENCES Locations(LocationID),
+    Status varchar2(50) DEFAULT 'Pending Approval' NOT NULL ,
+    States generated always as (RetrieveState(SourceLocationID)),
+    PromoCode varchar2(50) DEFAULT NULL REFERENCES PromoCode(PromoCode) ,
+    ReasonForCancellation varchar2(100),
+    EstimationAmount generated always as(EstimateTripAmount(SourceLocationID, DestinationLocationID, PromoCode))
+    
+ );
+ 
+
+ 
+  drop table Request;
+ 
+------------- TRIP TABLE ----------------------------
+
+CREATE TABLE Trip (
+  RequestID varchar2(11) NOT NULL REFERENCES Request(RequestID),
+  Distance decimal(5,3) NOT NULL,
+  Status varchar2(50) DEFAULT 'On the Way' NOT NULL ,
+  StartTimestamp Date DEFAULT SYSDATE NOT NULL ,
+  DropTimestamp Date DEFAULT SYSDATE NOT NULL 
+); 
+ 
+ drop table Trip;
+
+
+------------- INVOICE TABLE ----------------------------
+
+
+CREATE TABLE Invoice (
+  ID INTEGER GENERATED AS IDENTITY(Start with 1 increment by 1) NOT NULL,
+  InvoiceID varchar2(11) not null primary key,
+  RequestID varchar2(11) NOT NULL REFERENCES Request(RequestID),
+  Distance decimal(5,2) NOT NULL,
+  Price decimal(10,3) NOT NULL
+  );
+
+   drop table Invoice;
+
+------------- PAYMENT GATEWAY TABLE ----------------------------
+
+
+CREATE TABLE PaymentGateway (
+  ID INTEGER GENERATED AS IDENTITY(Start with 1 increment by 1) NOT NULL,
+  PaymentID varchar2(11) not null primary key,
+  InvoiceID varchar2(11) NOT NULL REFERENCES Invoice(InvoiceID),
+  RiderID varchar2(11) NOT NULL REFERENCES Rider(RiderID),
+  MethodOfPayment varchar2(25) NOT NULL,
+  Amount decimal(10,2) NOT NULL,
+  Status varchar2(15) NOT NULL
+  );
+
+ drop table PaymentGateway;
