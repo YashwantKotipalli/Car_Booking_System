@@ -43,3 +43,57 @@ CREATE TABLE Rider (
   );
   
  drop table Rider;
+ 
+ 
+ 
+ ------------- DRIVER TABLE ----------------------------
+
+CREATE TABLE Driver (
+  ID INTEGER GENERATED AS IDENTITY(Start with 1 increment by 1) NOT NULL,
+  DriverID varchar2(11) not null primary key,
+  UserID varchar2(11) NOT NULL REFERENCES UserProfile(UserID),
+  LicenseNo varchar2(20),
+  Gender char,
+  TotalEarnings decimal(10,2) DEFAULT 0 NOT NULL 
+  );
+  
+ drop table Driver;
+------------- CAR OWNER TABLE ----------------------------
+
+
+CREATE TABLE CarOwner (
+  ID INTEGER GENERATED AS IDENTITY(Start with 1 increment by 1) NOT NULL,
+  OwnerID varchar2(11) not null primary key,
+  UserID varchar2(11) NOT NULL REFERENCES UserProfile(UserID),
+  CompanyName varchar2(30),
+  ContractType varchar2(20),
+  TotalEarnings decimal(10,2) DEFAULT 0 NOT NULL ,
+  ContractDuration INTEGER DEFAULT 0 NOT NULL 
+  );
+  
+   drop table CarOwner;
+   
+------------- FEEDBACK TABLE ----------------------------
+
+
+CREATE TABLE FeedBacks (
+  ID INTEGER GENERATED AS IDENTITY(Start with 1 increment by 1) NOT NULL,
+  FeedBackID varchar2(11) not null primary key,
+  UserID varchar2(11) NOT NULL REFERENCES UserProfile(UserID),
+  Rating decimal(2,1) DEFAULT 0 NOT NULL ,
+  Remarks varchar2(100)
+  );
+
+ drop table Feedbacks;
+
+------------- PROMO CODE TABLE ----------------------------
+
+
+CREATE TABLE PromoCode (
+  PromoCode varchar2(50)  NOT NULL Primary Key,
+  Offer varchar2(100) not null,
+  DiscountAmount decimal(5,2) DEFAULT 0 NOT NULL
+  );
+  
+  drop table PromoCode;
+
