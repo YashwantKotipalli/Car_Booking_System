@@ -69,19 +69,15 @@ AS
 		END IF;
 END;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 --------------------------------------- 3. STORED PROCEDURE TO UPDATE AN EXISTING DRIVER PROFILE FOR ENTERING THE LICENSE DETAILS ---------------------------------------------------------------
+
+create or replace procedure DRIVERAPPROVAL(USERNAME varchar, LICENSENO varchar, GENDER char)
+is
+begin
+    MERGE INTO DRIVER D
+    USING      USERPROFILE U
+    ON         (D.USERID = U.USERID)
+    WHEN MATCHED THEN
+        UPDATE SET D.LICENSENO = LICENSENO, D.GENDER = GENDER
+        WHERE      U.USERNAME = USERNAME;
+end DRIVERAPPROVAL;
